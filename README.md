@@ -58,7 +58,7 @@ Metrics : 加速比 ，资源利用率
 #### 第一阶段：环境搭建与准备
 1. **基础集群部署：** 搭建Hadoop分布式集群，配置 Hadoop 的 yarn-site.xml 和 mapred-site.xml。确保其 Zookeeper 能够正常协调各 Worker。
 2. **环境检查：** 环境环境验证 java -version、hadoop version 和 giraph 命令是否正常。
-3.**测试:** 在单机下跑pagerank和 Giraph 自带的 SimpleShortestPathsComputation，确保计算框架链路通畅。
+3. **测试:** 在单机下跑pagerank和 Giraph 自带的 SimpleShortestPathsComputation，确保计算框架链路通畅。
 #### 第二阶段：算法编程实现
 1. **MapReduce 版实现：**
 2. **Giraph (BSP) 版实现：**
