@@ -19,6 +19,7 @@
     │   └── README.md        #
     ├── scripts/             # 公共脚本
     │   ├── plot_results.py  # Python 脚本：读取 metrics.csv 并生成性能对比图表
+    │   ├── random_data.py   # Python 脚本：用于随机生成不同规模的数据
     │   └── .empty           
     ├── images/              # 存放 README.md 使用的静态图片
     │   └── README.md        # 
