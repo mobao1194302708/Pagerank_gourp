@@ -1,9 +1,28 @@
 # 作业提交模板
 
-```
+```bash
+
 .
-├── code/                   # 所有实验代码
-└── README.md               # 项目核心文档
+└── code/
+    ├── giraph-impl/         # Giraph 实现模块
+    │   ├── src/             #  Java 源码
+    │   ├── pom.xml          # 定义了 Giraph 和 Hadoop 依赖
+    │   └── run-giraph.sh    # 封装了提交 Giraph 任务至 YARN 的 shell 脚本
+    ├── mapreduce-impl/      # MapReduce 实现模块
+    │   ├── src/             # 实现 PageRank 迭代逻辑的 Mapper/Reducer 源码
+    │   ├── pom.xml          # 定义了 Hadoop 相关依赖
+    │   └── run-mr.sh        # 封装了循环提交 MapReduce 作业的迭代脚本
+    ├── input_data/          # 实验输入数据集
+    │   └── README.md        # 
+    ├── output_data/         # 实验结果存储
+    │   ├── metrics.csv      # 指标数据
+    │   └── README.md        #
+    ├── scripts/             # 公共脚本
+    │   ├── plot_results.py  # Python 脚本：读取 metrics.csv 并生成性能对比图表
+    │   └── .empty           
+    ├── images/              # 存放 README.md 使用的静态图片
+    │   └── README.md        # 
+    └── README.md            # 项目主说明文档
 ```
 
 ## 研究目的
