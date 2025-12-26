@@ -111,7 +111,7 @@ Hadoop/Giraph 集群节点配置汇总表
 1. **基础集群部署：** 搭建Hadoop分布式集群，配置 Hadoop 的 yarn-site.xml 和 mapred-site.xml。确保其 Zookeeper 能够正常协调各 Worker。如下是Hadoop的Overview。
 ![Hadoop](code/images/hdfs.png)
 
-2.**环境检查：** 环境环境验证 java -version、hadoop version 和 giraph 命令是否正常。
+2. **环境检查：** 环境环境验证 java -version、hadoop version 和 giraph 命令是否正常。
 3. **测试:** 在单机下跑pagerank和 Giraph 自带的 SimpleShortestPathsComputation，确保计算框架链路通畅。
 4. 如下是Master和Slave的JPS截图
 
