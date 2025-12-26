@@ -146,9 +146,17 @@ Hadoop/Giraph 集群节点配置汇总表
 ![读写对比图](code/images/启动时间与总时间对比图.png)
 ##### 1.2 对比Giraph和MapReduce读写HDFS的字节数和读写时间
 ![读写对比图](code/images/HDFS读写与磁盘读写对比图.png)
-#### 2. 数据与计算模型
+#### 2.数据与计算模型
+##### 2.1 对比Giraph发送的消息字节数和MapReduce的Shuffle字节数
+![读写对比图](code/images/datastastic&datamodel/data_analysis/cmp_2.png)
+##### 2.2 对比Giraph和MapReduce的内存开销
+![读写对比图](code/images/datastastic&datamodel/data_analysis/cmp_1.png)
+##### 2.3 绘制MapReduceHDFS读写字节数与任务规模的关系
+![](code/images/datastastic&datamodel/data_analysis/cmp_3.png)
+#### 3.数据通信
+##### 3.1 对比Giraph和MapReduce在运行时的网络I/O使用情况
 
-#### 3. 数据通信
+##### 3.2 对比MapReduce的Shuffle耗时和Giraph每个SuperStep的栅栅同步时间(Barrier)
 
 
 <img width="1737" height="244" alt="image" src="https://github.com/user-attachments/assets/d27c7761-41db-4610-a3db-3d7cdff7e6ac" />
@@ -157,5 +165,6 @@ Hadoop/Giraph 集群节点配置汇总表
 总结研究的主要发现。
 ### 分工
 尽可能详细地写出每个人的具体工作和贡献度，并按贡献度大小进行排序。
+
 
 
