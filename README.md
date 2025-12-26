@@ -108,9 +108,17 @@ Hadoop/Giraph 集群节点配置汇总表
 列出执行实验的关键步骤，并对关键步骤进行截图，如 MapReduce / Spark / Flink 部署成功后的进程信息、作业执行成功的信息等，**截图能够通过显示用户账号等个性化信息佐证实验的真实性**。
 
 #### 第一阶段：环境搭建与准备
-1. **基础集群部署：** 搭建Hadoop分布式集群，配置 Hadoop 的 yarn-site.xml 和 mapred-site.xml。确保其 Zookeeper 能够正常协调各 Worker。
-2. **环境检查：** 环境环境验证 java -version、hadoop version 和 giraph 命令是否正常。
+1. **基础集群部署：** 搭建Hadoop分布式集群，配置 Hadoop 的 yarn-site.xml 和 mapred-site.xml。确保其 Zookeeper 能够正常协调各 Worker。如下是Hadoop的Overview。
+![Hadoop](code/images/hdfs.png)
+
+2.**环境检查：** 环境环境验证 java -version、hadoop version 和 giraph 命令是否正常。
 3. **测试:** 在单机下跑pagerank和 Giraph 自带的 SimpleShortestPathsComputation，确保计算框架链路通畅。
+4. 如下是Master和Slave的JPS截图
+
+![JPS](code/images/master_jps.png)
+![JPS](code/images/slave_jps.png)
+
+
 #### 第二阶段：算法编程实现
 1. **MapReduce 版实现：**
    
@@ -130,6 +138,11 @@ Hadoop/Giraph 集群节点配置汇总表
     - **作业总时长：** 从提交到任务结束的时间。
     - **迭代间隙开销：** 记录 MapReduce 频繁读写 HDFS 产生的 I/O 耗时。
     - **网络通信量：** 记录 Giraph 在 BSP 同步点（Barrier）前后的网络流量。
+4. **数据收集**
+    - 我们部署了JobHIstory来监控Mapreduce的每一轮迭代与Giraph的运行指标。
+    - ![部分运行历史](code/images/jobhistory.png)
+    - ![部分运行历史](code/images/single_state.png)
+
 ---
 
 #### 第五阶段：对比分析与结论撰写
