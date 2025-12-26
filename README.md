@@ -16,6 +16,7 @@
     │   └── README.md        # 
     ├── output_data/         # 实验结果存储
     │   ├── metrics.csv      # 指标数据
+    │   ├── mapreduce_log_500.txt      # Mapreduce的500MB运行日志
     │   └── README.md        #
     ├── scripts/             # 公共脚本
     │   ├── plot_results.py  # Python 脚本：读取 metrics.csv 并生成性能对比图表
