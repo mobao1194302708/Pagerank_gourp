@@ -141,10 +141,21 @@ Hadoop/Giraph 集群节点配置汇总表
 4. **可扩展性讨论：**
     - 观察当数据规模超出内存容量时，Giraph 的表现是否会大幅下降（触发 Spill），从而分析其局限性。
 ### 实验结果与分析
+#### 1.迭代方式
+##### 1.1 对比Giraph和MapReduce的任务启动延时(Start Time - Submited Time)
+![读写对比图](code/images/启动时间与总时间对比图.png)
+##### 1.2 对比Giraph和MapReduce读写HDFS的字节数和读写时间
+![读写对比图](code/images/HDFS读写与磁盘读写对比图.png)
+#### 2. 数据与计算模型
+
+#### 3. 数据通信
+
+
 <img width="1737" height="244" alt="image" src="https://github.com/user-attachments/assets/d27c7761-41db-4610-a3db-3d7cdff7e6ac" />
 
 ### 结论
 总结研究的主要发现。
 ### 分工
 尽可能详细地写出每个人的具体工作和贡献度，并按贡献度大小进行排序。
+
 
