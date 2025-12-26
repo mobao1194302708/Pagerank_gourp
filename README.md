@@ -35,28 +35,6 @@
 理解Giraph所采用的BSP（Bulk Synchronous Parallel）模型的设计理念及其在图计算中的优势。
 重点探讨两者在数据通信方式、任务调度机制及迭代开销等方面的不同，以及这些差异对算法性能
 与可扩展性的影响。
-### 1. 迭代方式
-- Giraph: 图迭代计算视为一个任务，节点工作进程常驻，只需要在任务开始和结束时从HDFS上读取输入，写入输出
-- MapReduce: 一轮迭代视为一个任务，迭代过程会反复启动和销毁任务进程，每轮迭代都需要从HDFS上读取输入、写入输入
-25m~500m
-    - 对比Giraph和MapReduce的任务启动延时(Start Time - Submited Time)
-    - 对比Giraph和MapReduce读写HDFS的字节数
-    - 对比Giraph和MapReduce读写HDFS的用时
-
-### 2. 数据与计算模型
-- Giraph：以图数据结构为数据模型，采用以顶点为中心的计算模型，在顶点上定义计算方法，顶点完成计算后沿着顶点之间的边传输消息。支持图数据的直接表示，输入数据经过加载后形成图结构数据，驻留在内存中，数据通信只需传输Rank值，不需要传输图结构。
-- MapReduce：以键值数据结构作为数据模型，计算分成两个阶段：map:对键值转化和分组 ；reduce:对相同键的数据进行合并。无法直接表示图数据，只能将图数据转化为键值形式，这会导致部分数据冗余存储。加之MapReduce是无状态计算，图结构不会驻留内存，每轮迭代需要在HDFS上加载和写入图结构数据，每次Shuffle不仅需要传输Rank值，还要传输图结构。
-25m~500m
-    - 对比Giraph发送的消息字节数和MapReduce的Shuffle字节数。
-    - 对比Giraph和MapReduce的内存开销。
-    - 绘制MapReduceHDFS读写字节数与任务规模的关系。
-### 3. 数据通信:
-- Giraph:采用BSP同步和Message消息传递，不同顶点之间并发处理，每个顶点的compute()计算完成后就可以调用sendMessage()发送消息传递数据，最终通过BSP同步所以顶点的计算和通信，Giraph能够更充分地利用I/O资源。
-- MapReduce: 采用Shuffle机制实现Map任务和Reduce任务之间的数据传输，一个Map任务需要完成全部图顶点的处理才能进入Shuffle阶段，最先被处理的图顶点将被阻塞直到Map任务完成，此过程将会导致I/O资源的浪费。
-100m 迭代5轮
-    - 对比Giraph和MapReduce在运行时的网络I/O使用情况。
-25m~500m
-    - 对比MapReduce的Shuffle耗时和Giraph每个SuperStep的栅栅同步时间(Barrier)
 
 ### 4.**可拓展性差异**
 -  数据可拓展性：固定Worker数量，增加图规模
@@ -166,21 +144,27 @@ JobHistoryServer的Web页面：
 
 使用Giraph和MapReduce在5个不同规模的数据集上运行PageRank任务，各自迭代10轮。 比较Giraph和MapReduce的任务启动延时以及任务执行时HDFS读写字节数。探讨Giraph和MapReduce所采用的不同的任务迭代方式对任务执行效率的影响。
 
-- Giraph: 图迭代计算视为一个任务，节点工作进程常驻，只需要在任务开始和结束时从HDFS上读取输入，写入输出
-- MapReduce: 一轮迭代视为一个任务，迭代过程会反复启动和销毁任务进程，每轮迭代都需要从HDFS上读取输入、写入输入
+Giraph: 图迭代计算视为一个任务，节点工作进程常驻，只需要在任务开始和结束时从HDFS上读取输入，写入输出
 
-    - 对比Giraph和MapReduce的任务启动延时
-    - 对比Giraph和MapReduce读写HDFS的字节数
+MapReduce: 一轮迭代视为一个任务，迭代过程会反复启动和销毁任务进程，每轮迭代都需要从HDFS上读取输入、写入输入
+
+对比Giraph和MapReduce的任务启动延时
+
+对比Giraph和MapReduce读写HDFS的字节数
 
 #### (三)、计算模型对比实验
 
 使用Giraph和MapReduce在5个不同规模的数据集上运行PageRank任务，各自迭代10轮。  对比Giraph发送的消息字节数和MapReduce的Shuffle字节数，比较Giraph和MapReduce的内存开销，探讨Giraph和MapReduce所采用的不同的计算模型对于任务执行效率的影响。
 
-- Giraph：以图数据结构为数据模型，采用以顶点为中心的计算模型，在顶点上定义计算方法，顶点完成计算后沿着顶点之间的边传输消息。支持图数据的直接表示，输入数据经过加载后形成图结构数据，驻留在内存中，数据通信只需传输Rank值，不需要传输图结构。
-- MapReduce：以键值数据结构作为数据模型，计算分成两个阶段：map:对键值转化和分组 ；reduce:对相同键的数据进行合并。无法直接表示图数据，只能将图数据转化为键值形式，这会导致部分数据冗余存储。加之MapReduce是无状态计算，图结构不会驻留内存，每轮迭代需要在HDFS上加载和写入图结构数据，每次Shuffle不仅需要传输Rank值，还要传输图结构。
-    - 对比Giraph发送的消息字节数和MapReduce的Shuffle字节数。
-    - 对比Giraph和MapReduce的内存开销。
-    - 绘制MapReduceHDFS读写字节数与任务规模的关系。
+Giraph：以图数据结构为数据模型，采用以顶点为中心的计算模型，在顶点上定义计算方法，顶点完成计算后沿着顶点之间的边传输消息。支持图数据的直接表示，输入数据经过加载后形成图结构数据，驻留在内存中，数据通信只需传输Rank值，不需要传输图结构。
+
+MapReduce：以键值数据结构作为数据模型，计算分成两个阶段：map:对键值转化和分组 ；reduce:对相同键的数据进行合并。无法直接表示图数据，只能将图数据转化为键值形式，这会导致部分数据冗余存储。加之MapReduce是无状态计算，图结构不会驻留内存，每轮迭代需要在HDFS上加载和写入图结构数据，每次Shuffle不仅需要传输Rank值，还要传输图结构。
+
+对比Giraph发送的消息字节数和MapReduce的Shuffle字节数。
+
+对比Giraph和MapReduce的内存开销。
+
+绘制MapReduceHDFS读写字节数与任务规模的关系。
 
 
 #### (四)、数据通信对比实验
@@ -192,10 +176,13 @@ JobHistoryServer的Web页面：
 使用Giraph和MapReduce在5个不同规模的数据集上运行PageRank任务，各自迭代10轮。对比MapReduce平均每轮的Shuffle耗时与Giraph 平均每轮的等待网络I/O的时间。探讨Giraph和MapReduce采用的不同的数据通信模式对于任务执行的影响。
 
 
-- Giraph:采用BSP同步和Message消息传递，不同顶点之间并发处理，每个顶点的compute()计算完成后就可以调用sendMessage()发送消息传递数据，最终通过BSP同步所以顶点的计算和通信，Giraph能够更充分地利用I/O资源。
-- MapReduce: 采用Shuffle机制实现Map任务和Reduce任务之间的数据传输，一个Map任务需要完成全部图顶点的处理才能进入Shuffle阶段，最先被处理的图顶点将被阻塞直到Map任务完成，此过程将会导致I/O资源的浪费。
-    - 对比Giraph和MapReduce在运行时的网络I/O使用情况。
-    - 对比MapReduce的Shuffle耗时和Giraph每个SuperStep的栅栅同步时间(Barrier)
+Giraph:采用BSP同步和Message消息传递，不同顶点之间并发处理，每个顶点的compute()计算完成后就可以调用sendMessage()发送消息传递数据，最终通过BSP同步所以顶点的计算和通信，Giraph能够更充分地利用I/O资源。
+
+MapReduce: 采用Shuffle机制实现Map任务和Reduce任务之间的数据传输，一个Map任务需要完成全部图顶点的处理才能进入Shuffle阶段，最先被处理的图顶点将被阻塞直到Map任务完成，此过程将会导致I/O资源的浪费。
+
+对比Giraph和MapReduce在运行时的网络I/O使用情况。
+
+对比MapReduce的Shuffle耗时和Giraph每个SuperStep的栅栅同步时间(Barrier)
 
 
 ### 实验结果与分析
@@ -214,7 +201,7 @@ HDFS读写字节数对比：
 ![读写对比图](code/images/HDFS读写与磁盘读写对比图.png)
 
 
-分析：从实验结果来看，MapReduce的启动延时远高于Giraph。而且随着数据规模的增长，MapReduce的启动延时呈现上升趋势。此外，MapReduce在任务执行时的HDFS读写字节数也显著高于Giraph。这些现象归结于二者迭代方式的不同：Giraph将图迭代计算视为一个任务，节点工作进程常驻内存，只需要在整个任务开始和结束时从HDFS上读取输入，写入输出。而MapReduce则将计算中的每一轮迭代视为一个单独的任务，迭代过程会反复启动和销毁任务进程，且每轮迭代都需要从HDFS上读取输入、写入输出，进而导致MapReduce的启动延时和HDFS读写开销显著高于Giraph。
+**分析**：从实验结果来看，MapReduce的启动延时远高于Giraph。而且随着数据规模的增长，MapReduce的启动延时呈现上升趋势。此外，MapReduce在任务执行时的HDFS读写字节数也显著高于Giraph。这些现象归结于二者迭代方式的不同：Giraph将图迭代计算视为一个任务，节点工作进程常驻内存，只需要在整个任务开始和结束时从HDFS上读取输入，写入输出。而MapReduce则将计算中的每一轮迭代视为一个单独的任务，迭代过程会反复启动和销毁任务进程，且每轮迭代都需要从HDFS上读取输入、写入输出，进而导致MapReduce的启动延时和HDFS读写开销显著高于Giraph。
 
 #### (二)、计算模型对比实验
 
@@ -235,6 +222,8 @@ Giraph和MapReduce的内存开销对比：
 ![读写对比图](code/images/datastastic&datamodel/data_analysis/cmp_1.png)
 
 **分析**：
+
+从实验结果可见，Giraph 在任务调度稳定性、I/O 吞吐效率及总体性能上均显著优于 MapReduce，且随着数据规模增大，MapReduce 呈现指数级耗时增长，而 Giraph 保持了良好的线性扩展性。这是因为，MapReduce 受限于“无状态”迭代模式，每轮迭代需反复启动销毁进程并强制读写 HDFS，导致调度延时累积与磁盘 I/O 爆发式膨胀。而 Giraph 采用进程常驻与内存驻留模型，避免了中间磁盘交互，且其以顶点为中心的通信模型仅传输精简的 Rank 值而非完整图结构，将网络负载降低至 MapReduce 的 27% 左右。这种机制彻底消除了冗余的 I/O 阻塞与调度开销，使 Giraph 能够以更低的内存占用实现高效、稳定的图计算。
 
 #### (三)、数据通信对比实验
 
@@ -301,6 +290,8 @@ Giraph 在图迭代计算场景下具有压倒性优势。它通过常驻工作�
 
 ### 分工
 
+莫易新：尝试 Apache Giraph 在本地环境的部署与配置（基于 PageRank 算法的计算任务调试），并构建 GitHub 版本控制仓库进行项目管理，撰写最终实验结论。
 
+潘飞扬：寻找并构建数据集，尝试giraph的构建，运行MapReduce的实验，部分实验数据分析
 
-
+俞言骐：mapreduce上的pagerank算法实现、部分性能监测脚本的实现、部分实验数据分析
