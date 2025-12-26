@@ -142,6 +142,7 @@ JobHistoryServer的Web页面：
 
 #### (二)、迭代方式对比实验
 
+
 使用Giraph和MapReduce在5个不同规模的数据集上运行PageRank任务，各自迭代10轮。 比较Giraph和MapReduce的任务启动延时以及任务执行时HDFS读写字节数。探讨Giraph和MapReduce所采用的不同的任务迭代方式对任务执行效率的影响。
 
 Giraph: 图迭代计算视为一个任务，节点工作进程常驻，只需要在任务开始和结束时从HDFS上读取输入，写入输出
