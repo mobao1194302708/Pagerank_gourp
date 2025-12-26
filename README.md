@@ -159,12 +159,11 @@ Hadoop/Giraph 集群节点配置汇总表
 ##### 3.2 对比MapReduce的Shuffle耗时和Giraph每个SuperStep的栅栅同步时间(Barrier)
 
 
-<img width="1737" height="244" alt="image" src="https://github.com/user-attachments/assets/d27c7761-41db-4610-a3db-3d7cdff7e6ac" />
-
 ### 结论
 总结研究的主要发现。
 ### 分工
 尽可能详细地写出每个人的具体工作和贡献度，并按贡献度大小进行排序。
+
 
 
 
