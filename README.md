@@ -155,9 +155,9 @@ Hadoop/Giraph 集群节点配置汇总表
 ![](code/images/datastastic&datamodel/data_analysis/cmp_3.png)
 #### 3.数据通信
 ##### 3.1 对比Giraph和MapReduce在运行时的网络I/O使用情况
-
+![读写对比图](code/images/网络流量对比.jpg)
 ##### 3.2 对比MapReduce的Shuffle耗时和Giraph每个SuperStep的栅栅同步时间(Barrier)
-
+![读写对比图](code/images/通信等待时间对比.jpg)
 
 ### 结论
 总结研究的主要发现。
